@@ -83,10 +83,10 @@ figure('name', 'Conjugate Gradient (CG) Method');
 colormap(gray(256));
 
 suptitle('Conjugate Gradient (CG) Method');
-subplot(231);   imagesc(x,     	wndImg); 	axis image off;     title('ground truth');
-subplot(232);   imagesc(x_full, wndImg);   	axis image off;     title(['full-dose_{FBP, view : ', num2str(VIEW) '}']);
-subplot(234);   imagesc(x_low,  wndImg);   	axis image off;     title({['low-dose_{FBP, view : ', num2str(VIEW) '}'], ['MSE : ' num2str(mse_x_low, '%.4e')], ['PSNR : ' num2str(psnr_x_low, '%.4f')], ['SSIM : ' num2str(ssim_x_low, '%.4f')]});
-subplot(235);   imagesc(x_cg,   wndImg);  	axis image off;     title({['recon_{CG}'], ['MSE : ' num2str(mse_x_cg, '%.4e')], ['PSNR : ' num2str(psnr_x_cg, '%.4f')], ['SSIM : ' num2str(ssim_x_cg, '%.4f')]});
+subplot(231);   imagesc(x,     	wndImg); 	axis image off;     title('(a) ground truth');
+subplot(232);   imagesc(x_full, wndImg);   	axis image off;     title(['(b) full-dose_{FBP, view : ', num2str(VIEW) '}']);
+subplot(234);   imagesc(x_low,  wndImg);   	axis image off;     title({['(c) low-dose_{FBP, view : ', num2str(VIEW) '}'], ['MSE : ' num2str(mse_x_low, '%.4e')], ['PSNR : ' num2str(psnr_x_low, '%.4f')], ['SSIM : ' num2str(ssim_x_low, '%.4f')]});
+subplot(235);   imagesc(x_cg,   wndImg);  	axis image off;     title({['(d) recon_{CG}'], ['MSE : ' num2str(mse_x_cg, '%.4e')], ['PSNR : ' num2str(psnr_x_cg, '%.4f')], ['SSIM : ' num2str(ssim_x_cg, '%.4f')]});
 
 subplot(2,3,[3,6]); semilogy(obj, '*-');    title(COST.equation);  xlabel('# of iteration');   ylabel('Objective'); 
                                             xlim([1, niter]);   grid on; grid minor;
