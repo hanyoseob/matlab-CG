@@ -64,6 +64,34 @@ for the vector `x`, where the known n x n matrix `A` is symmetric (i.e., A^T = A
             end
         end
 
-## Results
-![alt text](./img/reconstructed_image.png "Reconstructed by CG method")
 
+---
+
+## Example 
+### Problem definition
+In X-ray computed tomography (CT) system, radiation exposure is critical limitation. To reduce the radiation exposure, X-ray CT system uses a low-dose X-ray source. The low-dose X-ray source generate severe poisson noise when X-ray photon are measured at X-ray detector, then a reconstruction image using low-dose measurement is too noisy to diagnosis diseases by doctor. Below image shows (a) full-dose image and (b) low-dose image, respectively.
+
+![alt text](./img/low_dose_image.png "low dose image")
+
+To reduce the noise, objective function with total variation (TV) regularization can be formulated as follows:
+
+$$L(\textrm{x}) = \frac{1}{2} || \textrm{y} - A\textrm{x} ||_2^2 + \frac{\lambda}{2} ( ||D_x(\textrm{x})||_2^2 + ||D_y(\textrm{x})||_2^2 ),$$
+
+where $\textrm{y}$ is measurement and $\textrm{x}$ defines reconstruction image (denoised image). $A$ is system operator (in this case, it is defined as CT system operator, called by **radon transform**). $D_x$ and $D_y$ are differential operators along x-axis and y-axis, respectively.
+
+In above equation, since each terms is quadratic function, an optimal point of $\textrm{x}$ is $\frac{d}{d\textrm{x}}L(x)=0$:
+
+$$-A^T (\textrm{y} - A\textrm{x})+ \lambda( D_x^T D_x(\textrm{x}) + D_y^T D_y(\textrm{x})) = 0,$$
+
+$$A^TA(\textrm{x}) + \lambda( D_x^T D_x(\textrm{x}) + D_y^T D_y(\textrm{x})) = A^T\textrm{y},$$
+
+$$[A^TA + \lambda( D_x^T D_x + D_y^T D_y)](\textrm{x}) = A^T\textrm{y}.$$
+
+To match the CG formula, $[A^TA + \lambda( D_x^T D_x + D_y^T D_y)]$ is defined as $A_{cg}$ and $A^T\textrm{y} = b$, then
+
+$$\therefore A_{cg}(\textrm{x}) = b.$$
+
+Now, above equation form $A_{cg}(\textrm{x}) = b$ is exactly matched with CG equation form $A(x)=b$. Using above reordered formula, optimal point $\textrm{x}^*$ of $L(\textrm{x})$ can be found.
+
+### Results
+![alt text](./img/reconstructed_image.png "Reconstructed by CG method")
