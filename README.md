@@ -71,7 +71,7 @@ end
 
 ## Example 
 ### Problem definition
-In X-ray computed tomography (CT) system, radiation exposure is critical limitation. To reduce the radiation exposure, X-ray CT system uses a low-dose X-ray source. The low-dose X-ray source generate severe poisson noise when X-ray photon are measured at X-ray detector, then a reconstruction image using low-dose measurement is too noisy to diagnosis diseases by doctor. Below image shows (a) full-dose image and (b) low-dose image, respectively.
+In X-ray computed tomography (CT) system, radiation exposure is critical limitation. To reduce the radiation exposure, X-ray CT system uses a low-dose X-ray source. The low-dose X-ray source generate severe poison noise when X-ray photon are measured at X-ray detector, then a reconstruction image using low-dose measurement is too noisy to diagnosis diseases by doctor. Below image shows (a) full-dose image and (b) low-dose image, respectively.
 
 ![alt text](./img/low_dose_image.png "low dose image")
 
