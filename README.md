@@ -1,4 +1,4 @@
-# conjugate-gradient-method
+# CG method
 
 ## Reference 
 Conjugate Gradient Method `(ENG)`
