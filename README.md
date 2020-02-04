@@ -22,47 +22,49 @@ or,
 for the vector `x`, where the known n x n matrix `A` is symmetric (i.e., A^T = A), positive-definite (i.e., x^T A x > 0 for all non-zero vectors x in R^n), and real, and `b` is known as well. We denote the unique solution of this system by `x^*`.
 
 ## The basic iteration CG for solving problem (matrix ver.)
+```matlab
+function [x] = conjgrad(A, b, x)
+    r = b - A * x;
+    p = r;
+    rsold = r' * r;
 
-        function [x] = conjgrad(A, b, x)
-            r = b - A * x;
-            p = r;
-            rsold = r' * r;
-
-            for i = 1:length(b)
-                Ap = A * p;
-                alpha = rsold / (p' * Ap);
-                x = x + alpha * p;
-                r = r - alpha * Ap;
-                rsnew = r' * r;
-                if sqrt(rsnew) < 1e-10
-                    break;
-                end
-                p = r + (rsnew / rsold) * p;
-                rsold = rsnew;
-            end
+    for i = 1:length(b)
+        Ap = A * p;
+        alpha = rsold / (p' * Ap);
+        x = x + alpha * p;
+        r = r - alpha * Ap;
+        rsnew = r' * r;
+        if sqrt(rsnew) < 1e-10
+            break;
         end
- 
+        p = r + (rsnew / rsold) * p;
+        rsold = rsnew;
+    end
+end
+```
 
 ## The basic iteration CG for solving problem (function ver.)
 
-        function [x] = conjgrad(A, b, x, N)
-            r = b - A ( x );
-            p = r;
-            rsold = r(:)' * r(:);
+```matlab
+function [x] = conjgrad(A, b, x, N)
+    r = b - A ( x );
+    p = r;
+    rsold = r(:)' * r(:);
 
-            for i = 1:N
-                Ap = A ( p );
-                alpha = rsold / (p(:)' * Ap(:));
-                x = x + alpha * p;
-                r = r - alpha * Ap;
-                rsnew = r(:)' * r(:);
-                if sqrt(rsnew) < 1e-10
-                    break;
-                end
-                p = r + (rsnew / rsold) * p;
-                rsold = rsnew;
-            end
+    for i = 1:N
+        Ap = A ( p );
+        alpha = rsold / (p(:)' * Ap(:));
+        x = x + alpha * p;
+        r = r - alpha * Ap;
+        rsnew = r(:)' * r(:);
+        if sqrt(rsnew) < 1e-10
+            break;
         end
+        p = r + (rsnew / rsold) * p;
+        rsold = rsnew;
+    end
+end
+```
 
 
 ---
