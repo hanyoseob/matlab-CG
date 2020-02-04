@@ -64,3 +64,6 @@ for the vector `x`, where the known n x n matrix `A` is symmetric (i.e., A^T = A
             end
         end
 
+## Results
+![alt text](./img/reconstructed_image.png "Reconstructed by CG method")
+

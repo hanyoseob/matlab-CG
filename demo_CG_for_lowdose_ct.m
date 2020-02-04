@@ -12,23 +12,24 @@ home;
 %% GPU Processing
 % If there is GPU device on your board, 
 % then isgpu is true. Otherwise, it is false.
-bgpu    = false;
-bfig    = true;
+isgpu   = true;
+isfig   = true;
 
 %%  SYSTEM SETTING
 N       = 512;
+ANG     = 180;
 VIEW    = 360;
-THETA   = linspace(0, 180, VIEW + 1);   THETA(end) = [];
+THETA   = linspace(0, ANG, VIEW + 1);   THETA(end) = [];
 
-R       = @(x) radon(x, THETA);
-RT      = @(y) iradon(y, THETA, 'none', N)/(pi/(2*length(THETA)));
-RINV    = @(y) iradon(y, THETA, N);
+A       = @(x) radon(x, THETA);
+AT      = @(y) iradon(y, THETA, 'none', N)/(pi/(2*length(THETA)));
+AINV    = @(y) iradon(y, THETA, N);
 
 %% DATA GENERATION
 load('XCAT512.mat');
 x       = imresize(double(XCAT512), [N, N]);
-p       = R(x);
-x_full  = RINV(p);
+p       = A(x);
+x_full  = AINV(p);
 
 %% LOW-DOSE SINOGRAM GENERATION
 i0     	= 5e4;
@@ -38,28 +39,28 @@ pn     	= poissrnd(pn);
 pn      = max(-log(max(pn,1)./i0),0);
 
 y       = pn;
-x_low   = RINV(y);
 
 %% CONJUGATE GRADIENT METHOD (CG) INITIALIZATION
-LAMBDA  = 5e2;
-A       = @(x) (RT(R(x))  + LAMBDA*(Dxt(Dx(x)) + Dyt(Dy(x))));
+x_low   = AINV(y);
+LAMBDA  = 3e2;
+Acg     = @(x) (AT(A(x))  + LAMBDA*(Dxt(Dx(x)) + Dyt(Dy(x))));
 
-b0      = RT(y);
+b0      = AT(y);
 x0      = zeros(N);
 
-niter   = 2e1;
+niter   = 5e1;
 
 L2              = @(x) power(norm(x, 'fro'), 2);
 COST.equation   = '1/2 * || A(X) - Y ||_2^2 + lambda/2 * ( || D_x(X) ||_2^2 + || D_y(X) ||_2^2 )';
-COST.function	= @(x) 1/2 * L2(R(x) - y) + LAMBDA/2 * (L2(Dx(x)) + L2(Dy(x)));
+COST.function	= @(x) 1/2 * L2(A(x) - y) + LAMBDA/2 * (L2(Dx(x)) + L2(Dy(x)));
 
 %% RUN CONJUGATE GRADIENT METHOD (CG)
-if bgpu
+if isgpu
     b0 = gpuArray(b0);
     x0 = gpuArray(x0);
 end
 
-[x_cg, obj]	= CG(A, b0, x0, niter, COST, bfig);
+[x_cg, obj]	= CG(Acg, b0, x0, niter, COST, isfig);
 
 %% CALCUATE QUANTIFICATION FACTOR 
 x_low       = max(x_low, 0);
